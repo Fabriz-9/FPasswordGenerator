@@ -14,10 +14,9 @@ if key == "FPasswordGenerator":
 
 lowercase_letters = "qwertyuiopasdfghjklzxcvbnm"
 uppercase_letters = "QWERTYUIOPASDFGHJKLZXCVBNM"
-characters = "!#$%&*+-"
+characters = "!#$%&*+-/~"
 numbers = "1234567890"
-pool = lowercase_letters + uppercase_letters + characters + numbers
-
+pool = lowercase_letters + uppercase_letters + characters + numbers # creates a pool of all lowercase and uppercase letters, some characters and numbers
 
 print("\nStarting the password generator, press (ctrl + c) anytime to cancel or just close the console.")
 
@@ -30,24 +29,24 @@ def randomize(length):
     ]
     for _ in range(length-4): # -4 because theres 4 added characters already
         result.append(random.choice(pool))
-    random.shuffle(result)
-    return "".join(result)
+    random.shuffle(result) # shuffles the password, so the 4 added characters arent all in the start
+    return "".join(result) 
 
 try:
     subkey = input("- Insert subkey, or just hit enter to skip.\nsubkey=").lower()
     second_subkey = input("- Insert second subkey, or just hit enter to skip.\nsecond_subkey=").lower()
     
-    combined_key = hashlib.sha512(f"{key}:{subkey}:{second_subkey}".encode()).hexdigest()
+    combined_key = hashlib.sha512(f"{key}:{subkey}:{second_subkey}".encode()).hexdigest() # extra layer of security
 
     random.seed(combined_key)
 
-    while True:
+    while True: # Loop until a valid length is inserted
         try:
             length = int(input("- Insert the length of the password\nlength="))
-            if length < 4:
+            if length < 4: # because of the already added characters I had to put this
                 print("## Warning: length is less than 4, insert a bigger number.")
                 continue
-            if length < 30:
+            if length < 30: # Just a warning for more security
                 print("## Warning: length is less than 30, less length is less secure.")
                 print("## Do you want to retype the length? ('y' to retype, anything else to continue):")
                 user_input = input().lower()
@@ -55,7 +54,7 @@ try:
                     continue
             break
         except ValueError:
-            print("## Invalid: enter a valid integer for the length.")
+            print("## Invalid: enter a valid integer for the length.") # in case someone inputs anything else than a integer
 
     pswrd = randomize(length)  # pswrd = password
     
